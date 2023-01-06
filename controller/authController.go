@@ -23,6 +23,7 @@ func Register(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		fmt.Println("Unable to parse body")
 	}
+
 	// validation
 	// check if password is lesser than 6 characters
 	if len(data["password"].(string)) <= 6 {
@@ -53,10 +54,15 @@ func Register(c *fiber.Ctx) error {
 		Phone:     data["phone"].(string),
 		Email:     strings.TrimSpace(data["email"].(string)),
 	}
+
 	user.SetPassword(data["password"].(string))
 	err := database.DB.Create(&user)
-
 	if err != nil {
-		log.Println()
+		log.Println(err)
 	}
+
+	return c.Status(200).JSON(fiber.Map{
+		"user":    user,
+		"message": "Account created successfully",
+	})
 }

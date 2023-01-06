@@ -2,6 +2,7 @@ package main
 
 import (
 	"blog-website-backend/database"
+	"blog-website-backend/routes"
 	"log"
 	"os"
 
@@ -20,5 +21,6 @@ func main() {
 
 	port := os.Getenv("PORT")
 	app := fiber.New()
+	routes.Setup(app)
 	app.Listen(":" + port)
 }
